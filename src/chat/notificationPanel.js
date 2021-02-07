@@ -4,7 +4,7 @@ class NotificationPanel extends React.Component{
     constructor(props)
     {
         super(props);
-        this.visible = ["none","block"]
+        this.visible = ["hidden","visible"];
 
     }
     stopPropagation(e){
@@ -13,8 +13,14 @@ class NotificationPanel extends React.Component{
     }
 
     render(){
+        const blackStyle = {
+            visibility:this.visible[+this.props.visibility],
+            opacity:+this.props.visibility,
+            transition: "visibility 0s, opacity 1.5s linear;",
+
+    }
         return (
-            <div id={"black"} style={{display:this.visible[+this.props.visibility]}} onClick={() => this.props.toggleVisibility(false)}>
+            <div id={"black"} style={blackStyle} onClick={() => this.props.toggleVisibility(false)}>
                 <div id={"notification"} className={"winModal"} onClick={(e) => this.stopPropagation(e)}>
                     <div className={"winModalTitle"}>
                         <p >Notifications</p>

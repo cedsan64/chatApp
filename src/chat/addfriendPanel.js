@@ -4,7 +4,7 @@ class AddfriendPanel extends React.Component{
     constructor(props)
     {
         super(props);
-        this.state={friendListTab:true,founded:[]}
+        this.state={friendListTab:true,founded:{}}
         this.visible = ["none","block"]
         this.hoverColor = ["white","rgba(0,0,0,0.03)"]
     }
@@ -16,7 +16,7 @@ class AddfriendPanel extends React.Component{
 
     searchFriend(user){
         if (user.length === 0) this.setState({founded:[] });
-         fetch("http://localhost:3030/finduser?q="+user,{
+         fetch(`http://${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}/finduser?q=${user}`,{
             headers: {
                 "Authorization":"Bearer "+localStorage.getItem("userToken")
             },
@@ -29,6 +29,7 @@ class AddfriendPanel extends React.Component{
                     this.setState({
                         founded:result.data
                     });
+                    console.log(result.data);
                 }
             },
             // Remarque : il est important de traiter les erreurs ici
@@ -73,18 +74,30 @@ class AddfriendPanel extends React.Component{
 
                         </div>
                         <div style={{height:'90%',overflowY:"scroll"}} >
-                            {
-                                this.state.founded.length === 0 
+                            
+                            { // * already friends
+
+                                !this.state.founded.sent || (this.state.founded.sent.length === 0 && this.state.founded.receive.length === 0 && this.state.founded.other.length === 0 )
                                 ?
                                  <div style={{display:"flex",height:"100%",justifyContent:"center",alignItems:"center"}}>
                                      <span style={{color:"silver"}}>No result</span>
                                  </div>
                                 :
-                                this.state.founded.map((user) =>{
-                                return (
-                                    <AddFriendResult key={user.email} name={user.username} alreadyFriend={false} email={user.email}/>
-                                )
-                            })
+                                
+                                Object.keys((this.state.founded)).map((key,i) =>(
+ 
+                                    this.state.founded[key].map((user)=>{
+                                        if (key === "other") {
+                                            return (
+                                                <AddFriendResult key={user.email} name={user.username} status={"notFriend"} friendShip={key} email={user.email} toggleVisibility ={this.props.toggleVisibility} />
+                                                )    
+                                            }                                        
+                                        return (
+                                            <AddFriendResult key={user.email} name={user.username} status={user.status} friendShip={key} email={user.email} toggleVisibility ={this.props.toggleVisibility} />
+                                        )
+                                })
+                                
+                                ))
                             }
                         </div>
                     </div>

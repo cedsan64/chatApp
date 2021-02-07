@@ -1,6 +1,7 @@
 import React from 'react'
 import Contact from "./contact"
 import contactList from "./contacts"
+import {connect} from "react-redux"
 class Discussion extends React.Component{
     constructor(props){
         super(props)
@@ -38,9 +39,9 @@ class Discussion extends React.Component{
             <div id={"chats"} style={{overflowX: "hidden", overflowY: "scroll",}}>
                 {contactList.map((contact) =>  
                 {  
-                    let isActive = this.props.selectedContact === contact.name; 
+                    let isActive = this.props.contact === contact.name; 
                     return (
-                        <Contact name={contact.name} key={contact.name} lastMessage={contact.lastMessage} statut={""} selected={isActive} customOnClick={this.props.onChangeContact} />
+                        <Contact name={contact.name} key={contact.email} email={contact.email} lastMessage={contact.lastMessage} statut={""} selected={isActive} />
                     )
                 })
                 }
@@ -51,4 +52,9 @@ class Discussion extends React.Component{
     }
 }
 
-export default Discussion
+const mapStateToProps = (state) => {
+    return state
+  }
+  
+  export default connect(mapStateToProps)(Discussion)
+  

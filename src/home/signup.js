@@ -20,14 +20,21 @@ setAuth(token){
 
 }
 
-    handleSubmit(){ 
+    handleSubmit(event){
+        event.preventDefault();
+        this.setState({
+            errorEmail: "#",
+            errorUsername: "#",
+            errorPsswd:"#",
+            errorCgu: "#",
+        })  
         let data =  JSON.stringify({
             username: this.userName,
             password: this.passwd,
             email: this.email,
             guc : this.cgu,
         })
-        fetch('http://localhost:3030/register', {
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}/register`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'

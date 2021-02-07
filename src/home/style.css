@@ -83,10 +83,10 @@ h2 {
   font-weight: 400;
   display: block;
 }
-.btn:hover{
+/* .btn:hover{
   color: white !important;
   background-color: tomato !important;
-}
+} */
 
 .half ,.forgot-pass {
   position: relative;

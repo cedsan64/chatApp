@@ -18,12 +18,16 @@ class Login extends React.Component{
     
 
     handleSubmit(event){
+        this.setState({
+            errorEmail: "#",
+            errorUsername: "#",
+        }) 
         event.preventDefault() 
         let data =  JSON.stringify({
             email: this.email,
             password: this.passwd,
         })
-        fetch('http://localhost:3030/login', {
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}/login`, {
             method: 'post',
             headers: {
                 'Content-Type': 'application/json'

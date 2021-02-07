@@ -5,42 +5,28 @@ import Chat from './chat/chat'
 import Home from './home/home'
 import {BrowserRouter, Switch, Route,Redirect} from "react-router-dom"
 import {connect} from "react-redux"
-import { changeAuth } from './redux/actions';
+import { changeAuth, setSocket } from './redux/actions';
+
 class App extends React.Component {
   constructor(props){
     super(props)
     this.state ={loaded:false}
-    // this.setAuthState = this.setAuthState.bind(this)  
+    // this.setAuthState = this.setAuthState.bind(this) 
+     // client-side
+
   }
 
-    componentDidMount() {
+    componentWillMount() {
       let token = localStorage.getItem("userToken")
-      // console.log(token)
       if (token !== null) {
         this.props.dispatch(changeAuth(true));
       }
+      
       this.setState({loaded:true})
-
-      // fetch("http://localhost:8080/status")
-      //     .then(res => res.json())
-      //     .then(
-      //       (result) => {
-      //           // console.log(result)
-      //         this.setState({
-      //           isAuthenticated:result.status,loaded:true
-      //         });
-      //       },
-      //       // Remarque : il est important de traiter les erreurs ici
-      //       // au lieu d'utiliser un bloc catch(), pour ne pas passer à la trappe
-      //       // des exceptions provenant de réels bugs du composant.
-      //       (error) => {    
-      //         console.log(error)
-      //       }
-      //     )
       }
 
   render(){
-    // console.log(this.props, localStorage.getItem("userToken"))
+
     if (!this.state.loaded) {
       return (
         <div style={{position:"absolute",left:0,right:0,top:0,bottom:0}}>

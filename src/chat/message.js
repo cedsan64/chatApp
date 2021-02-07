@@ -1,11 +1,15 @@
-import React from 'react'
+import React from 'react';
+import {connect} from "react-redux";
 
 class Message extends React.Component{
     constructor(props){
         super(props)
+        this.state ={message:""};
+      console.log(4555);
 
     }
     render(){
+    this.message="";
     const messagesStyle={width:"75%", height:"100%", display:"flex", flexDirection:"column",backgroundColor:"white", }
     const enteteStyle = {borderBottom:"solid 2px #eee",height:"9%",display:"flex",alignItems:"center",justifyContent:"space-between", padding:"0 29px"}
     const conversationStyle = {border:"solid 0px red",height:"80%",backgroundColor:"#f3f3f3"}
@@ -17,9 +21,11 @@ class Message extends React.Component{
         color:"black",
         fontSize:"17px",
         fontWeight:"500",
+        textTransform:"capitalize"
     }
+    const messageInputStyle={width:"94%", margin:"0 auto",color:"gray",resize:"none",border:"none", fontSize:"17px",outline:"none",padding: "9px",height:"41%",}
 
-    if (this.props.selectedContact === "") {
+    if (this.props.contact === "") {
         return(
             <div style={{display:"flex",flexDirection:"column",justifyContent:"center",backgroundColor:"white",width:"75%",alignItems:'center'}}>
                 SELECT a DISCUSSION
@@ -32,7 +38,7 @@ class Message extends React.Component{
                 <div style={{display:"flex",alignItems:"center", cursor:"pointer",}}>
                     <img alt={"profile"} src={"../logo192.png"} width={"42px"} height={"42px"}/>
                     <span style={nameStyle}>
-                        {this.props.selectedContact}
+                        {this.props.contact}
                     </span>
                </div>
                <div>
@@ -54,7 +60,10 @@ class Message extends React.Component{
                 
             </div>
             <div id={"inputZone"} style={inputMsgStyle}>
-                <textarea  placeholder={"Type your message here..."} style={{width:"94%", margin:"0 auto",color:"gray",resize:"none",border:"none", fontSize:"17px",outline:"none",padding: "9px",height:"41%",}}>
+                <textarea  placeholder={"Type your message here..."} style={messageInputStyle} 
+                value={this.message}
+                onChange={(e) => this.message=e.target.value}
+                >
 
                 </textarea>
             </div>
@@ -86,7 +95,14 @@ class Message extends React.Component{
                 fontWeight: "600",
                 border: "none",
                 color: "snow",
-                borderRadius: "5px",}}>
+                borderRadius: "5px",
+                cursor:"pointer",
+                }}
+                onClick={() => {
+                    console.log("sendMsg",this.props.contactEmail,this.message);
+                    this.props.socket.emit("sendMsg",this.props.contactEmail,this.message);
+                }}
+                >
                         REPLY
                     </button>
 
@@ -99,4 +115,8 @@ class Message extends React.Component{
     }
 }
 
-export default Message
+const mapStateToProps = (state) => {
+    return state
+  }
+  
+  export default connect(mapStateToProps)(Message)

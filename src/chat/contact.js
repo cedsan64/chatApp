@@ -1,4 +1,7 @@
 import React from 'react'
+import {connect} from "react-redux"
+import { changeEmail, setSelectedContact } from '../redux/actions';
+
 // import PropTypes from "pr"
 class Contact extends React.Component{
     constructor(props){
@@ -9,7 +12,7 @@ class Contact extends React.Component{
         this.hoverredColor ="#5a6d80d1"
     }
     check(){
-        fetch("http://localhost:8080/status")
+        fetch(`http://${process.env.REACT_APP_SERVER_HOST}:${process.env.REACT_APP_SERVER_PORT}/status`)
             .then(res => res.json())
             .then(
               (result) => {
@@ -75,7 +78,7 @@ class Contact extends React.Component{
         }
         return(
 
-            <div style={this.props.selected ? activeContactStyle : ContactStyle} className={"contactItem"} onClick={() => this.props.customOnClick(this.props.name)}>
+            <div style={this.props.selected ? activeContactStyle : ContactStyle} className={"contactItem"} onClick={() => {this.props.dispatch(setSelectedContact(this.props.name));this.props.dispatch(changeEmail(this.props.email))}}>
                  <div style={{display:"flex",alignItems:'start',}}>
                     <div style={imgSlotStyle}  onClick={() => this.check()}>
                         <div className={"status"} style={activity}>
@@ -98,5 +101,9 @@ class Contact extends React.Component{
     }
 
 }
-
-export default Contact
+const mapStateToProps = (state) => {
+    return state
+  }
+  
+  export default connect(mapStateToProps)(Contact)
+  
