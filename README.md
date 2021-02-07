@@ -1,4 +1,4 @@
-# The serve for this app is in the chatpp_server repository
+# The server for this app is in the chatpp_server repository
 
 # Getting Started with Create React App
 
