@@ -1,7 +1,7 @@
 // import logo from './logo.svg';
 import React from 'react'
 import {connect} from "react-redux"
-import { changeAuth } from '../redux/actions';
+import { changeAuth, setSocket } from '../redux/actions';
 import Discussion from "./discussion"
 import NotificationPanel from "./notificationPanel"
 import AddfriendPanel from "./addfriendPanel"
@@ -28,6 +28,8 @@ class DiscussionContact extends React.Component {
 
     logout(){
         localStorage.removeItem("userToken");
+        this.props.socket.disconnect();
+        this.props.dispatch(setSocket(null));
         this.props.dispatch(changeAuth(false));
     }
 

@@ -1,7 +1,7 @@
 import React from "react"
 import './style.css';
 import {connect} from "react-redux"
-import { changeAuth, changeUsername } from '../redux/actions';
+import { changeAuth } from '../redux/actions';
 class Login extends React.Component{
     constructor(props){
         super(props)

@@ -10,10 +10,7 @@ import { io } from 'socket.io-client';
 
 class Chat extends React.Component {
   constructor(props){
-    super(props)
-    // this.state = {selectedContact:""}
-    // this.setSelectedContact = this.setSelectedContact.bind(this);
-   
+    super(props)   
 }
 
   componentWillMount() {
@@ -24,15 +21,12 @@ class Chat extends React.Component {
       }
     });
     this.props.dispatch(setSocket(socket));
-
+    // todo : peu etre inserer un temps de chargement avant la recuperation du web socket et tout
 
     }
   
-    setSelectedContact(contact) {
-        this.setState({selectedContact: contact})
-    }
-
   render(){
+
     const appStyle={display:'flex', height:'100%',flexDirection:'column',justifyContent:"center", alignItems:'center'}
     const mainContainerStyle={width:"1240px", borderRadius:"5px", minWidth:"1080px", height:"750px",boxShadow: "rgb(177 177 177) -3px -1px 20px 0px", border:"solid 0px #ddd",display:"flex"}
     

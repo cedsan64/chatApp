@@ -79,18 +79,18 @@ class Contact extends React.Component{
         return(
 
             <div style={this.props.selected ? activeContactStyle : ContactStyle} className={"contactItem"} onClick={() => {this.props.dispatch(setSelectedContact(this.props.name));this.props.dispatch(changeEmail(this.props.email))}}>
-                 <div style={{display:"flex",alignItems:'start',}}>
+                 <div style={{display:"flex",alignItems:'start',width:"100%"}}>
                     <div style={imgSlotStyle}  onClick={() => this.check()}>
                         <div className={"status"} style={activity}>
 
                         </div>
                         <img alt={"profile"} src={"../logo192.png"} width={"45px"} height={"45px"}/>
                     </div>
-                    <div className={"nameMsg"} style={{display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"5px 0 0 8px",}}>
+                    <div className={"nameMsg"} style={{display:"flex",flexDirection:"column",alignItems:"flex-start",margin:"5px 0 0 8px",width:"90%"}}>
                         <span style={nameStyle}>
                             {this.props.name}
                         </span>
-                        <p style={{lineHeight:1, margin:"9px 0", color:'white'}}>
+                        <p style={{lineHeight:1, margin:"9px 0", color:'white',width: "98%",whiteSpace: "nowrap",overflow: "hidden",textOverflow: "ellipsis"}}>
                         {this.props.lastMessage}
                         </p>
                     </div>

@@ -1,18 +1,40 @@
 import React from 'react';
 import {connect} from "react-redux";
-
+import { addMessage, setInputMessagePerDiscussion } from '../redux/actions';
+import MessageBubble from './messageBubble';
 class Message extends React.Component{
     constructor(props){
         super(props)
-        this.state ={message:""};
-      console.log(4555);
-
+        // this.state ={message:this.props.text};
     }
+
+    sendMessage(){
+        let message = this.props.discussions[this.props.contactEmail].messageInputContent.trim();
+        // todo : pk tu enleves les espaces au milieu maudit trim
+        if (message.length > 0) {
+            console.log("sendMsg",this.props.contactEmail,message,Date.now());
+            
+            let msgDatagram = this.formatMessage("me",message,Date.now(),"sent");
+            this.props.socket.emit("sendMsg",this.props.contactEmail,message);
+
+            this.props.dispatch(addMessage([msgDatagram]));
+            this.props.dispatch(setInputMessagePerDiscussion(""));
+        }
+    }
+
+    formatMessage(sender,content,date,status){
+        return  {
+            sender:sender,
+            content:content,
+            date:date,
+            status:status,
+        }
+    }
+
     render(){
-    this.message="";
     const messagesStyle={width:"75%", height:"100%", display:"flex", flexDirection:"column",backgroundColor:"white", }
     const enteteStyle = {borderBottom:"solid 2px #eee",height:"9%",display:"flex",alignItems:"center",justifyContent:"space-between", padding:"0 29px"}
-    const conversationStyle = {border:"solid 0px red",height:"80%",backgroundColor:"#f3f3f3"}
+    const conversationStyle = {border:"solid 0px red",height:"80%",backgroundColor:"#f3f3f3", padding:"20px",overflowY:"scroll",overflowX:"hidden"}
     const inputMsgStyle = {border:"solid 1px #eee",height:"7%", display:"flex",alignItems:"center",justifyContent:"center"}
     const emojiStyle = {border:"solid 0px green",height:"0%"}
     const multimediaStyle = {border:"solid 0px orange",padding:"0 29px",height:"6%",display:"flex",alignItems:"center",justifyContent:"space-between"}
@@ -56,15 +78,35 @@ class Message extends React.Component{
                 </svg>
                </div>
             </div>
+
+
             <div id={"conversation"} style={conversationStyle}>
-                
+                <div style={{display:"flex",flexDirection:"column",justifyContent:"flex-end",height:"100%"}}>
+            {this.props.discussions[this.props.contactEmail].messages.map((message) =>  
+                {  
+                    return (
+                        <MessageBubble sender={message.sender} message={message.content} status={message.status} date={message.date} />
+                        )
+                    })
+                }
+                </div>
             </div>
+
+
             <div id={"inputZone"} style={inputMsgStyle}>
                 <textarea  placeholder={"Type your message here..."} style={messageInputStyle} 
-                value={this.message}
-                onChange={(e) => this.message=e.target.value}
+                value={this.props.discussions[this.props.contactEmail].messageInputContent}
+                onChange={(e) => {
+                    this.props.dispatch(setInputMessagePerDiscussion(e.target.value))
+                }}
+                onKeyPress={(e) => {
+                    console.log(e.code);
+                    if (e.code === "Enter") {
+                            e.preventDefault();
+                            this.sendMessage();
+                        }
+                }}
                 >
-
                 </textarea>
             </div>
             <div id={"emoji"} style={emojiStyle}> {/* 34% un fois déployé*/}
@@ -98,10 +140,7 @@ class Message extends React.Component{
                 borderRadius: "5px",
                 cursor:"pointer",
                 }}
-                onClick={() => {
-                    console.log("sendMsg",this.props.contactEmail,this.message);
-                    this.props.socket.emit("sendMsg",this.props.contactEmail,this.message);
-                }}
+                onClick={() => this.sendMessage()}
                 >
                         REPLY
                     </button>
